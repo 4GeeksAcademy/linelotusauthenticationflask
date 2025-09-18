@@ -11,6 +11,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 # from models import Person
 
@@ -23,6 +24,9 @@ app.url_map.strict_slashes = False
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET')
 jwt = JWTManager(app)
+
+# Configure CORS to allow your frontend
+CORS(app, origins=["https://improved-space-doodle-g479rxrvw4pj29459-3000.app.github.dev"])
 
 
 # database condiguration

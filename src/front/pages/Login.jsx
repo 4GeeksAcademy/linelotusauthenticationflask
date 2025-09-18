@@ -8,27 +8,35 @@ export const Login = () => {
     const[password,setPassword] = useState("")
 
     const handleClick = () => {
-
-        const opts = {
-            method:'POST',
-            body: JSON.stringify((
-                {
-            "email":email,
-            "password":password
-            }
-            ))
-
-        }
-        fetch("https://improved-space-doodle-g479rxrvw4pj29459-3001.app.github.dev/api/token", opts)
-            .then(response => {
-                if (response.status === 200) return response.json();
-                else alert("There's an error!");
-                 })
-
-            .then(data => console.log(data))
-
-            .catch(error => { console.error('An error occurred:', error)});
-    }
+    console.log("1. Button clicked!"); // Confirms the function is called
+    console.log("2. Email:", email, "Password:", password); // Check if values are captured
+    
+    const opts = {
+        method:'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "email": email,
+            "password": password
+        })
+    };
+    
+    console.log("3. About to make fetch request..."); // Confirms we reach the fetch
+    
+    fetch("https://improved-space-doodle-g479rxrvw4pj29459-3001.app.github.dev/api/token", opts)
+        .then(response => {
+            console.log("4. Response received, status:", response.status); // See if request completed
+            if (response.status === 200) return response.json();
+            else alert("There's an error!");
+        })
+        .then(data => console.log("5. Success data:", data))
+        
+        .catch(error => { 
+            console.log("6. Error caught:", error); // See any errors
+            console.error('An error occurred:', error);
+        });
+}
 
 
 
@@ -59,20 +67,20 @@ export const Login = () => {
     // }, [])
 
     return (
-       <form class="row g-3">
+
+       <div className="container">
         <h1 className="display-4">Login</h1>
-            <form>
+           
                 <div className="text-center mt-5">
-                        <input type="text" className="form-control col-sm-10" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                 <div className="text-center mt-5">
-                        <input type="password" className="form-control col-sm-10" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <input type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                <div className="col-12">
-                 <button onclick={handleClick} className="btn btn-primary" type="submit">Login</button>
-                 </div>
-            </form>
-</form>
+
+                    <button onClick={handleClick}  type="button">Login</button>
+
+</div>
     
     );
 }; 
