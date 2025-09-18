@@ -6,6 +6,8 @@ export const Login = () => {
     const { store, dispatch } = useGlobalReducer()
     const[email,setEmail] = useState("")
     const[password,setPassword] = useState("")
+    const token = sessionStorage.getItem("token");
+
 
     const handleClick = () => {
     console.log("1. Button clicked!"); // Confirms the function is called
@@ -30,8 +32,12 @@ export const Login = () => {
             if (response.status === 200) return response.json();
             else alert("There's an error!");
         })
-        .then(data => console.log("5. Success data:", data))
-        
+        .then(data =>{
+
+            console.log("5. Success backend data:", data);
+            sessionStorage.setItem("token", data.access_token);
+        })
+
         .catch(error => { 
             console.log("6. Error caught:", error); // See any errors
             console.error('An error occurred:', error);
@@ -70,15 +76,17 @@ export const Login = () => {
 
        <div className="container">
         <h1 className="display-4">Login</h1>
-           
+                {(token && token!="" && token!=undefined) ? "You're logged in with this token" + token : 
+                
                 <div className="text-center mt-5">
                         <input type="text" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                <div className="text-center mt-5">
+                   
                         <input type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
+                   
 
-                    <button onClick={handleClick}  type="button">Login</button>
+                    <button onClick={handleClick}  type="button">Login</button>  </div>
+           }
+                
 
 </div>
     
