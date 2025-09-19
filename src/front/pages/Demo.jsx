@@ -17,8 +17,8 @@ export const Demo = () => {
               className="list-group-item d-flex justify-content-between"
               style={{ background: item.background }}> 
               
-              {/* Link to the detail page of this todo. */}
-              <Link to={"/single/" + item.id}>Link to: {item.title} </Link>
+              {/* Display the todo item content */}
+              <span>{item.text || `Todo ${item.id}`}</span>
               
               <p>Open file ./store.js to see the global store that contains and updates the list of colors</p>
               
@@ -35,9 +35,16 @@ export const Demo = () => {
       </ul>
       <br />
 
-      <Link to="/">
-        <button className="btn btn-primary">Back home</button>
-      </Link>
+      {/* Navigation links */}
+      <div>
+        {/* <Link to="/">
+          <button className="btn btn-primary">Back home</button>
+        </Link> */}
+        
+        <Link to="/login" className="ms-2">
+          <button className="btn btn-secondary">Go to Login</button>
+        </Link>
+      </div>
     </div>
   );
 };
