@@ -25,17 +25,25 @@ def create_token():
     if not email or not password:
         return jsonify({"msg": "Email and password required"}), 400
     
-    print(f"Login attempt for: {email}")  # Debug log
-    print(f"Registered users: {list(registered_users.keys())}")  # Debug log
-    
-    # Check if user exists and password matches
-    if email in registered_users and registered_users[email] == password:
-        print(f"Login successful for: {email}")  # Debug log
+    user = User.query.filter_by(email = email).first()
+    if not user: 
+        return jsonify({"msg": "user not found"}), 404
+    if user.check_password(password): 
         access_token = create_access_token(identity=email)
         return jsonify(access_token=access_token)
     else:
         print(f"Login failed for: {email}")  # Debug log
         return jsonify({"msg": "Invalid email or password"}), 401
+    
+    # print(f"Login attempt for: {email}")  # Debug log
+    # print(f"Registered users: {list(registered_users.keys())}")  # Debug log
+    
+    # # Check if user exists and password matches
+    # if email in registered_users and registered_users[email] == password:
+    #     print(f"Login successful for: {email}")  # Debug log
+    #     access_token = create_access_token(identity=email)
+    #     return jsonify(access_token=access_token)
+   
 
 @api.route("/signup", methods=["POST"])
 def signup():
@@ -67,6 +75,16 @@ def signup():
         registered_users[email] = password
         print(f"User created successfully: {email}")  # Debug log
         print(f"Current registered users: {list(registered_users.keys())}")  # Debug log
+
+        user = User(
+            email = email, 
+            password_hash = password
+        )
+
+        user.set_password(password)
+
+        db.session.add(user) 
+        db.session.commit()
         
         return jsonify({"msg": "User created successfully"}), 201
         
